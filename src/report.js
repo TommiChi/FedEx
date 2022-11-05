@@ -157,7 +157,7 @@ const renderFromTemplate = (lighthouseTests) => {
         ${lighthouseTests.reduce((output, test, index) => {
             const allInOneLine = ReportGenerator.generateReport(test, 'html').replace(/((\<\!\-\-)(\S|\s){1,}(\-\-\>))|(\r|\t|\n){1,}/gm, ''); // .replace(/(\/)/g, '\\/').replace(/(\')/g, "\\'");
             console.warn(allInOneLine);
-            fs.writeFile(path.join(__dirname, '..', 'reports', `report${index}.html`), allInOneLine)
+            fs.writeFile(path.join(__dirname, '..', 'docs', 'reports', `report${index}.html`), allInOneLine)
             return `${output}
             <div><label>${test.requestedUrl}</label><button></button></div><iframe src="reports/report${index}.html"></iframe>
             <script>
@@ -175,7 +175,7 @@ const generateReport = (data, isMultiple = false) => {
     // const markup = !!isMultiple ? reportMultiplePages(data) : ReportGenerator.generateReport(data, 'html');
     // const updatedMarkup = injectHeadline(markup);
     const updatedMarkup = renderFromTemplate(data);
-    fs.writeFile(path.join(__dirname, '..', 'index.html'), updatedMarkup)
+    fs.writeFile(path.join(__dirname, '..', 'docs', 'index.html'), updatedMarkup)
     .then(() => {
         console.log('HTML report generated!');
     });
