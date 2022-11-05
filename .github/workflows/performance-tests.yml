@@ -10,5 +10,4 @@ jobs:
         with:
           node-version: '18'
       - run: npm install
-      - run: cd src
-      - run: node plainpuppeteer.js
+      - run: cd src && node plainpuppeteer.js
