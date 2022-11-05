@@ -3,7 +3,7 @@ run-name: Triggered by ${{ github.actor }} on every PUSH
 on: [push]
 jobs:
   run-lighthouse-tests:
-    runs-on: ianwalter/puppeteer-container
+    runs-on: macos-12
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
