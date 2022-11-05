@@ -155,9 +155,6 @@ const renderFromTemplate = (lighthouseTests) => {
             Lighthouse report generated on ${day}-${month}-${year}@${hours}:${minutes}
         </div>
         ${lighthouseTests.reduce((output, test, index) => {
-            const allInOneLine = ReportGenerator.generateReport(test, 'html').replace(/((\<\!\-\-)(\S|\s){1,}(\-\-\>))|(\r|\t|\n){1,}/gm, ''); // .replace(/(\/)/g, '\\/').replace(/(\')/g, "\\'");
-            console.warn(allInOneLine);
-            fs.writeFile(path.join(__dirname, '..', 'docs', 'reports', `report${index}.html`), allInOneLine)
             return `${output}
             <div><label>${test.requestedUrl}</label><button></button></div><iframe src="reports/report${index}.html"></iframe>
             <script>
@@ -169,6 +166,11 @@ const renderFromTemplate = (lighthouseTests) => {
     </body>
 </html>
     `;
+};
+
+const generatePage = (data, index) => {
+    const allInOneLine = ReportGenerator.generateReport(data, 'html').replace(/((\<\!\-\-)(\S|\s){1,}(\-\-\>))|(\r|\t|\n){1,}/gm, ''); // .replace(/(\/)/g, '\\/').replace(/(\')/g, "\\'");
+    return fs.writeFile(path.join(__dirname, '..', 'docs', 'reports', `report${index}.html`), allInOneLine)
 };
 
 const generateReport = (data, isMultiple = false) => {
@@ -183,4 +185,5 @@ const generateReport = (data, isMultiple = false) => {
 
 module.exports = {
     generateReport,
+    generatePage
 };
