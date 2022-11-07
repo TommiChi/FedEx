@@ -14,5 +14,4 @@ jobs:
           node-version: '18'
       - run: npm install
       - run: cd src && node plainpuppeteer.js
-      - run: git add . && git commit -m "Lighthouse tests"
-      - run: git push origin docs -f
+      - run: git add . && git commit -m "Lighthouse tests" && git push origin docs -f
