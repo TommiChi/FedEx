@@ -1,7 +1,15 @@
 
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
+        <script>
+            window.addEventListener('message', function (event) {
+                const { lighthouseIndex, height } = JSON.parse(event.data)
+                if (![null, undefined].includes(lighthouseIndex)) {
+                    document.querySelectorAll('iframe')[lighthouseIndex].setAttribute('data-height', height);
+                }
+            }, false);
+        </script>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
         <link rel="icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAEhklEQVR4AWJxL/BhIAesev1U5tcflpncgNrKIsqNIwzC9feMpDUzs70kOczMzMzJJcxwCTMzncPMnOwtzBwzMzPb0vRfeZPp0VhPS5I39V5fdiXV1/VD+9QC7OVn9BsyH1XIoEI1PfmJvLFowVV564+34DFUHudbmfDh4kVXh//7XwE+WjS/YfXZe3yr4j2rqj1AIhSB7hZ8ZtPZu/zw8cK523U4wE1/rvPfWrz4zs0m9ZdC9yUJAlASdBAgocRegfF/f3/h/PuaFsxMdwjAR0vm1+06eMMfIrhLqTWqdH4EumU2SPfMhigJAlRQbZrgrRsl9U+Y2DYDFCz3ILC9kiAiqSrMwbWT0nceEnR+9Kggc2zjOJCASDENkg0a5HfZZgDP81CM3CrQs2Z1+o7DJ6ePr8sK0AOCHv5Jjdt3evyYSaZ351VIStIxPRAUtrBYbxC6w+BZ0ivVSBKkIhJhemSyZpfB00EiPO2VjzYkxhcqXQqCWCShGplvi3y0QxqbuBurMjyJeWnkHZuAEgIQGsUBqwrfjZ+IlBgKyRJzVVYF8O6qFWdh86YzQzMrZigYmxAyfvHgLZQ/LC1CbeniW2Hkqr/PH16SgvGuf2/uzNMBwJA/njxizGPtSyAf7EziJCMGRDRdhoAC4PL1A/SrKQMAAQkEfpJAcRQdrBJ7gNwjSpJsdwK+CANBkqa1LgQB4IicV9nYUct7gaxuDJUErQIiEAiMxLVOFlKzIktPpT0ggpdpC/8YAHnxbgkUY4tAAFSR7AAXNyAAWHJrA/kHGjzg5nleuwFO7Nd/IoDw4Pm58+4jNLmYG0wRA5bErc2Mr3Y+dXTDW1VvwqbJkzMCHQ4S1GTCBOIgUHJrGdEwqzR+jAp/o2qAZelUDoQnruEEdDclJI6576AlNVfc+22XN/+Y1vnJD0Yind6UpEEvn/Hqq15EYjCW7jZCJEpnNvDgkyelDjs106kuux2AAXCSobULOWP8mLhYlpoDMK4qAFXJGk+grtH8YXVz5KJblqaG1+VUdTc0I290bmUQAriGITRbdQnom0aoFj8kx1+wMD2ifncAXUQE4SkDqN1hE0jEophs1SUwZAOhUAiMCLwRtamtTZtbbmZErSAUHbSysaoEmnrsakiMiUAURi283gN6wans9oX8rOCrj7/JP35DFD+iQ7Au/K2KE1jzx6ujjUnXFH9KjEq6ZlhsTBICrNLJf47Pv/pkHzvup1w4dmUbEei0+bcXRqJuh5kVARQ8byyYxOwNGr7A87xh1tp8sGT+uMInrwi++Xj7TQz2d27NvwEkrOflAFQGIDA5khASBCGdO2/Z/MnLPwYfv5TFhjW7QhVKAB6afwe2LpFlFsCnlQEosgQgDsdOG1/LKeNqJS4JCSPJ/i+TakwEARor7gER1Iva5JmPOJK0RUqmoPnnlzFCtmIAhAAQEIQRgDaiYPIauNXcnDlRIrWNFY3hm7PG9YRqr7IV7HrCgAC17befjEvRq2nGhAHtBqDpOuI/I1diUUAMYIxEdyejBJqLnNoszGZtfiX/CztGv2mq+sdaAAAAAElFTkSuQmCC">
@@ -9,11 +17,25 @@
         <style>
             body {
                 margin: 0;
+                font-family: Arial, Helvetica;
+                padding: 61px 10px 0;
             }
             
             .headline {
                 font-family: Arial;
                 overflow: hidden;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                box-shadow: 0 0 5px 0;
+                background-color: #ffffff;
+                z-index: 10;
+                height: 51px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
             }
     
             .text-logo {
@@ -23,7 +45,8 @@
                 margin: 0 10px;
                 overflow: hidden;
                 width: 82px;
-                transform: translateY(4px);
+                height: 36px;
+                transform: translateY(-20%);
             }
     
             .text-logo__fed {
@@ -32,7 +55,7 @@
             }
     
             .text-logo__x {
-                transform: translate(3%, 10px);
+                transform: translate(3%, 9px);
                 letter-spacing: 0px;
                 display: inline-block;
                 color: #FF6600;
@@ -48,31 +71,159 @@
 
             iframe {
                 border: none;
-                width: 100vw;
+                width: 100%;
+                height: 0;
+                overflow: hidden;
+                transition: all 0.3s ease-out 0s;
+            }
+
+            .toggle-view {
+                cursor: pointer;
+            }
+
+            .toggle-view button {
+                width: 30px;
+                height: 30px;
+                position: relative;
+                display: inline-block;
+                overflow: hidden;
+                padding: 0;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .toggle-view button::after {
+                content: "";
+                width: 5px;
+                height: 5px;
+                border: solid 5px red;
+                display: block;
+                border-bottom-color: transparent;
+                border-left-color: transparent;
+                transition: transform 0.2s ease-out 0s;
+                transform-origin: 60% 40%;
+                transform: translate(25%, 25%) rotate(45deg);
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-right-color: #4D148C;
+                border-top-color: #FF6600;
+            }
+
+            .toggle-view button.active::after {
+                transform: translate(25%, 25%) rotate(135deg);
+            }
+
+            .scroll-arrow.up {
+                width: 110px;
+                height: 24px;
+                position: relative;
+                display: inline-block;
+                overflow: hidden;
+                padding: 0 0 4px 0;
+                background: none;
+                border: none;
+                cursor: pointer;
+            }
+
+            .scroll-arrow.up::after {
+                content: "";
+                width: 5px;
+                height: 5px;
+                border: solid 3px transparent;
+                display: block;
+                border-bottom-color: transparent;
+                border-left-color: transparent;
+                transition: transform 0.2s ease-out 0s;
+                transform-origin: 60% 40%;
+                transform: translate(25%, 25%) rotate(315deg);
+                position: absolute;
+                top: 8px;
+                left: 0;
+                border-right-color: #4D148C;
+                border-top-color: #FF6600;
+            }
+
+            .scroll-arrow.up::before {
+                content: "";
+                width: 5px;
+                height: 5px;
+                border: solid 3px transparent;
+                display: block;
+                border-bottom-color: transparent;
+                border-left-color: transparent;
+                transition: transform 0.2s ease-out 0s;
+                transform-origin: 60% 40%;
+                transform: translate(25%, 25%) rotate(315deg);
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-right-color: #4D148C;
+                border-top-color: #FF6600;
+            }
+
+            #scrollIntoView {
+                position: absolute;
+                display: block;
+                top: 0;
+                left: 0;
+                width: 0;
+                height: 0;
+                z-index: 0;
             }
         </style>
     </head>
     <body>
         <noscript>Lighthouse report requires JavaScript. Please enable.</noscript>
+        <span id="scrollIntoView"></span>
         <div class="headline">
             <h1 class="text-logo">
                 <span class="text-logo__fed"><span class="purple">Fed</span><span class="orange">E</span></span><span class="text-logo__x">x</span>
             </h1>
-            Lighthouse report generated on 05-11-2022@16:32
+            <span>Lighthouse report generated on 09-11-2022@09:11. Tests took 2m59s to run</span>
+            <span><button class="scroll-arrow up">Back to top</button></span>
         </div>
         
-            <div><label>https://www.fedex.com/lite/lite-ship.html?locale=en_nl&cntry_code=nl_english#address</label><button></button></div><iframe src="reports/report0.html"></iframe>
-            <script>
-                var iframe = document.querySelectorAll('iframe')[0];
-                iframe.style.cssText = 'height: ' + iframe.contentWindow.outerHeight + 'px;';
-            </script>
+            <div class="toggle-view"><label for="toggle-view-0">https://www.fedex.com/lite/lite-ship.html?locale=en_nl&cntry_code=nl_english#address</label><button id="toggle-view-0" class="toggle-view__button" data-index="0"></button></div><iframe src="reports/report0.html"></iframe>
             
-            <div><label>https://www.fedex.com/en-nl/online/rating.html#</label><button></button></div><iframe src="reports/report1.html"></iframe>
-            <script>
-                var iframe = document.querySelectorAll('iframe')[1];
-                iframe.style.cssText = 'height: ' + iframe.contentWindow.outerHeight + 'px;';
-            </script>
+            <div class="toggle-view"><label for="toggle-view-1">https://www.fedex.com/en-nl/online/rating.html#</label><button id="toggle-view-1" class="toggle-view__button" data-index="1"></button></div><iframe src="reports/report1.html"></iframe>
             
+            <div class="toggle-view"><label for="toggle-view-2">https://www.fedex.com/en-nl/shipping/schedule-pickup.html#form</label><button id="toggle-view-2" class="toggle-view__button" data-index="2"></button></div><iframe src="reports/report2.html"></iframe>
+            
+            <div class="toggle-view"><label for="toggle-view-3">https://www.fedex.com/en-nl/shipping/industry-solutions/ecommerce.html</label><button id="toggle-view-3" class="toggle-view__button" data-index="3"></button></div><iframe src="reports/report3.html"></iframe>
+            
+            <div class="toggle-view"><label for="toggle-view-4">https://www.fedex.com/</label><button id="toggle-view-4" class="toggle-view__button" data-index="4"></button></div><iframe src="reports/report4.html"></iframe>
+            
+        <script>
+            var iFrameActions = {
+                add: function (iFrame) {
+                    iFrame.style.cssText = 'height: 100vh;';
+                },
+                remove: function (iFrame) {
+                    iFrame.style.cssText = 'height: 0px;';
+                }
+            };
+
+            document.body.addEventListener('click', (event) => {
+                const element = event.target;
+
+                if (element.classList.contains('toggle-view__button')) {
+                    const action = element.classList.contains('active') ? 'remove' : 'add';
+                    const index = Number(element.getAttribute('data-index'));
+                    element.classList[action]('active');
+                    iFrameActions[action](document.querySelectorAll('iframe')[index])
+                }
+
+                if (element.classList.contains('scroll-arrow')) {
+                    document.getElementById('scrollIntoView').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'end',
+                        inline: 'nearest'
+                    });
+                }
+            }, false);
+        </script>
     </body>
 </html>
     
