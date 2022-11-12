@@ -7,15 +7,6 @@ const { generateReport, generatePage } = require('./report');
 const urls = require('./test-cases');
 
 const allTests = [];
-let testRunningTime = 0;
-
-// const testRunningTime = {
-//   duration: 0,
-//   resolve: null,
-//   async: new Promise((resolve) => {
-//     testRunningTimeResolver = resolve;
-//   }),
-// };
 
 const observer = new PerformanceObserver((items) => {
   const targetEntry = items.getEntries().find(entry => entry.name === 'Total running time for all Lighthouse tests');
@@ -52,8 +43,6 @@ const runAllTests = async (browser, index, allUrls) => {
     generatePage(data.lhr, index).then(async () => {
       await browser.close();
       performance.measure('Total running time for all Lighthouse tests', myMark);
-
-      // generateReport(allTests, testRunningTime.async)
     });
   }
 
