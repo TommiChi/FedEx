@@ -9,6 +9,8 @@ jobs:
     runs-on: macos-12
     steps:
       - id: generatePrNumber
+        uses: actions/checkout@v3
+        uses: actions/setup-node@v3
         run: |
           node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
       - id: renderTemplate
