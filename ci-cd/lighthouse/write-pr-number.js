@@ -4,4 +4,6 @@ const path = require('path');
 
 const { PR_PATH } = process.env;
 
-fs.writeFileSync(path.join(__dirname, '..', '..', 'pr-number.txt'), PR_PATH.split('/').reverse().find((part) => /^(\d+)$/.test(part)));
+console.warn('!!!!!!!!!!!!!!!\n', PR_PATH.split('/').reverse().find((part) => /^(\d+)$/.test(part)));
+
+fs.writeFileSync(path.join(__dirname, '..', '..', 'pr-number.txt'), PR_PATH.split('/').reverse().find((part) => /^(\d+)$/.test(part)), { encoding: 'utf8' });
