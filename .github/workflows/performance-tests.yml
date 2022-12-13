@@ -6,13 +6,12 @@ on:
 
 jobs:
   createPullRequest:
+    runs-on: macos-12
     steps:
       - id: generatePrNumber
-        runs-on: macos-12
         run: |
           node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
       - id: renderTemplate
-        runs-on: self-hosted
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
@@ -23,7 +22,6 @@ jobs:
         with:
           body: ${{ steps.renderTemplate.outputs.result }}
       - id: batman
-        runs-on: macos-12
         run: |
           echo "${{ github.actor }}"
 
