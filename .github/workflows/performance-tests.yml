@@ -12,7 +12,7 @@ jobs:
       - uses: actions/setup-node@v3
       - id: generatePrNumber
         run: |
-          node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
+          PR_PATH=${{ secrets.GITHUB_REF }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
       - id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
