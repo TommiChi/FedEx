@@ -1,14 +1,27 @@
-name: performance-tests
-run-name: Triggered by ${{ github.actor }} on every PUSH
+name: pr-tests
+run-name: Triggered by ${{ github.actor }} on PR
 on:
-  push:
-    branches:
-      - main
-  repository_dispatch:
-    types:
-      - lighthouse
+  pull_request:
 
 jobs:
+  createPullRequest:
+    steps:
+      - id: generatePrNumber
+        runs-on: macos-12
+        run: |
+          node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
+      - id: renderTemplate
+        runs-on: self-hosted
+        uses: chuhlomin/render-template@v1.4
+        with:
+          template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
+          vars: |
+            prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
+      - id: pullRequest
+        uses: peter-evans/create-pull-request@v4
+        with:
+          body: ${{ steps.renderTemplate.outputs.result }}
+
   run-lighthouse-tests:
     runs-on: macos-12
     steps:
@@ -16,7 +29,4 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: npm install
-      - run: cd src && node plainpuppeteer.js
-      - run: git show-ref
-      - run: git add . && git commit -m "Lighthouse tests" && git push origin HEAD:docs -f
+      - run: echo "I am the second job"
