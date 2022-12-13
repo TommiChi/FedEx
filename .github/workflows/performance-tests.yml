@@ -1,7 +1,8 @@
 name: pr-tests
-run-name: Triggered by ${{ github.actor }} on PR
+run-name: Triggered by ${{ github.actor }} on PR and Push
 on:
   pull_request:
+  push:
 
 jobs:
   createPullRequest:
@@ -21,6 +22,11 @@ jobs:
         uses: peter-evans/create-pull-request@v4
         with:
           body: ${{ steps.renderTemplate.outputs.result }}
+      - id: batman
+        runs-on: macos-12
+        run: |
+          echo "${{ github.actor }}"
+
 
   run-lighthouse-tests:
     runs-on: macos-12
