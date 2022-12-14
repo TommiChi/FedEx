@@ -12,7 +12,9 @@ jobs:
       - uses: actions/setup-node@v3
       - id: generatePrNumber
         run: |
-          REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
+          PR=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+          echo "$PR --> PR"
+          REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat ./pr-number.txt)
       - id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
