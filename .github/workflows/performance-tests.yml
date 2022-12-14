@@ -38,7 +38,8 @@ jobs:
       - id: prNumber
         run: |
           echo "${{ github.event.number }} --> github.event.number"
-          echo "${{ secrets.GITHUB_REF }} --> secrets.GITHUB_REF"
+          echo "${{ GITHUB_REF }} --> GITHUB_REF"
+          echo "$GITHUB_REF --> dollar GITHUB_REF"
           echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
           echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
           echo "${{ github.ref }} --> github.ref"
@@ -46,5 +47,5 @@ jobs:
           echo "${{ github.event.pull_request.state }} --> github.event.pull_request.state"
           echo "${{ github.event.pull_request.number }} --> github.event.pull_request.number"
           echo "should not exist --> $(cat pr-number.txt)"
-          echo "${{ github.event.pull_request.description }} --> ${{ github.event.pull_request.description }}"
-          echo "${{ github.event.pull_request.body }} --> ${{ github.event.pull_request.body }}"
+          echo "${{ github.event.pull_request.description }} --> github.event.pull_request.description"
+          echo "${{ github.event.pull_request.body }} --> github.event.pull_request.body"
