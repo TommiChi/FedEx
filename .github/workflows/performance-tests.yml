@@ -20,9 +20,10 @@ jobs:
           vars: |
             prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
       - id: pullRequest
-        uses: peter-evans/create-pull-request@v4
+        uses: kt3k/update-pr-description@v1.0.1
         with:
-          body: ${{ steps.renderTemplate.outputs.result }}
+          pr_body: ${{ steps.renderTemplate.outputs.result }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - id: batman
         run: |
           echo "${{ github.actor }}"
@@ -45,3 +46,5 @@ jobs:
           echo "${{ github.event.pull_request.state }} --> github.event.pull_request.state"
           echo "${{ github.event.pull_request.number }} --> github.event.pull_request.number"
           echo "should not exist --> $(cat pr-number.txt)"
+          echo "${{ github.event.pull_request.description }} --> ${{ github.event.pull_request.description }}"
+          echo "${{ github.event.pull_request.body }} --> ${{ github.event.pull_request.body }}"
