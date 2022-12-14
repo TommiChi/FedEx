@@ -7,8 +7,8 @@ const { PR_NUMBER, REF } = process.env;
 const isCreatedPR = REF.indexOf('/pull/') > -1;
 
 if (!isCreatedPR) {
-  console.log('42');
-  return '42';
+  console.log('');
+  return '';
 }
 
 console.log(PR_NUMBER);

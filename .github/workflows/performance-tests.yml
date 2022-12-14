@@ -7,30 +7,20 @@ on:
 jobs:
   createPullRequest:
     runs-on: ubuntu-latest
-    outputs:
-      prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-      - id: generatePrNumber
+      - id: getPrNumber
         run: |
           echo "prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)" >> $GITHUB_OUTPUT
-        env:
-          prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
-      - id: echoStuff
-        run: |
-          echo "steps --> ${{ steps.generatePrNumber.outputs.prNumber }}"
-          echo "env --> ${{ env.prNumber }}"
-      - if: steps.generatePrNumber.outputs.prNumber != ''
+      - if: steps.getPrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
           vars: |
-            prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
+            prNumber: ${{ steps.getPrNumber.outputs.prNumber }}
             prNoomber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-      - if: steps.generatePrNumber.outputs.prNumber != ''
-        id: pullRequest
+      - if: steps.getPrNumber.outputs.prNumber != ''
+        id: updatePullRequest
         uses: tzkhan/pr-update-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"
@@ -39,24 +29,3 @@ jobs:
           body-template: ${{ steps.renderTemplate.outputs.result }}
           body-update-action: 'suffix'
           body-uppercase-base-match: false
-
-  displayPr:
-    runs-on: macos-12
-    steps:
-      - uses: jwalton/gh-find-current-pr@v1
-        id: findPr
-      - uses: 8BitJonny/gh-get-current-pr@2.2.0
-        id: PR
-      - id: prNumber
-        run: |
-          echo "${{ github.event.number }} --> github.event.number"
-          echo "$GITHUB_REF --> dollar GITHUB_REF"
-          echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
-          echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
-          echo "${{ github.ref }} --> github.ref"
-          echo "${{ github.event.pull_request.status }} --> github.event.pull_request.status"
-          echo "${{ github.event.pull_request.state }} --> github.event.pull_request.state"
-          echo "${{ github.event.pull_request.number }} --> github.event.pull_request.number"
-          echo "should not exist --> $(cat pr-number.txt)"
-          echo "${{ github.event.pull_request.description }} --> github.event.pull_request.description"
-          echo "${{ github.event.pull_request.body }} --> github.event.pull_request.body"
