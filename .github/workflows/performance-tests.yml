@@ -20,10 +20,10 @@ jobs:
           vars: |
             prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
       - id: pullRequest
-        uses: kt3k/update-pr-description@v1.0.1
+        uses: riskledger/update-pr-description@dev
         with:
-          pr_body: ${{ steps.renderTemplate.outputs.result }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          body: ${{ steps.renderTemplate.outputs.result }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - id: batman
         run: |
           echo "${{ github.actor }}"
