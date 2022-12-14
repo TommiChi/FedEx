@@ -5,29 +5,27 @@ on:
   push:
 
 jobs:
-  # createPullRequest:
-  #   runs-on: macos-12
-  #   steps:
-  #     - uses: 8BitJonny/gh-get-current-pr@2.2.0
-  #       id: PR
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #     - id: generatePrNumber
-  #       run: |
-  #         PR_PATH=${{ steps.PR.outputs.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
-  #     - id: renderTemplate
-  #       uses: chuhlomin/render-template@v1.4
-  #       with:
-  #         template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
-  #         vars: |
-  #           prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
-  #     - id: pullRequest
-  #       uses: peter-evans/create-pull-request@v4
-  #       with:
-  #         body: ${{ steps.renderTemplate.outputs.result }}
-  #     - id: batman
-  #       run: |
-  #         echo "${{ github.actor }}"
+  createPullRequest:
+    runs-on: macos-12
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - id: generatePrNumber
+        run: |
+          REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
+        id: renderTemplate
+        uses: chuhlomin/render-template@v1.4
+        with:
+          template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
+          vars: |
+            prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
+      - id: pullRequest
+        uses: peter-evans/create-pull-request@v4
+        with:
+          body: ${{ steps.renderTemplate.outputs.result }}
+      - id: batman
+        run: |
+          echo "${{ github.actor }}"
 
   displayPr:
     runs-on: macos-12
