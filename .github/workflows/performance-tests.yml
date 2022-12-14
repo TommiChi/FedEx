@@ -14,12 +14,13 @@ jobs:
       - uses: actions/setup-node@v3
       - id: generatePrNumber
         run: |
-          pullRequestId=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-          echo "prNumber=$pullRequestId" >> $GITHUB_OUTPUT
-          echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
-          echo "outputs --> ${{ env.prNumber }}"
+          echo "prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)" >> $GITHUB_OUTPUT
         env:
           prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
+      - id: echoStuff
+        run: |
+          echo "steps --> ${{ steps.generatePrNumber.outputs.prNumber }}"
+          echo "env --> ${{ env.prNumber }}"
       - if: steps.generatePrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
