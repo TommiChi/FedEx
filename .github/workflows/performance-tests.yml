@@ -46,3 +46,4 @@ jobs:
           echo "${{ github.event.pull_request.status }} --> github.event.pull_request.status"
           echo "${{ github.event.pull_request.state }} --> github.event.pull_request.state"
           echo "${{ github.event.pull_request.number }} --> github.event.pull_request.number"
+          echo "should not exist --> $(cat pr-number.txt)"
