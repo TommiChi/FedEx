@@ -12,15 +12,14 @@ jobs:
       - uses: actions/setup-node@v3
       - id: generatePrNumber
         run: |
-          PR=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js) && echo "$PR --> PR"
-          echo"Dollar --> $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)"
-          REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat ./pr-number.txt)
+          prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
       - id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
           vars: |
-            prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
+            prNoomber: ${{ steps.generatePrNumber.outputs.prNumber }}
+            prNumber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
       - id: pullRequest
         uses: tzkhan/pr-update-action@v2
         with:
