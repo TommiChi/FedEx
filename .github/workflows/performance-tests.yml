@@ -43,5 +43,6 @@ jobs:
           echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
           echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
           echo "${{ github.ref }} --> github.ref"
-          echo "${{ github.event.pull_request.opened }} --> github.event.pull_request.opened"
+          echo "${{ github.event.pull_request.status }} --> github.event.pull_request.status"
+          echo "${{ github.event.pull_request.state }} --> github.event.pull_request.state"
           echo "${{ github.event.pull_request.number }} --> github.event.pull_request.number"
