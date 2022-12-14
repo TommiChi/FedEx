@@ -8,6 +8,7 @@ jobs:
   createPullRequest:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - id: getPrNumber
         run: |
           echo "prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)" >> $GITHUB_OUTPUT
