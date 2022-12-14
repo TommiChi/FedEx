@@ -13,7 +13,7 @@ jobs:
       - id: generatePrNumber
         run: |
           REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
-        id: renderTemplate
+      - id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
