@@ -38,8 +38,6 @@ jobs:
       - uses: 8BitJonny/gh-get-current-pr@2.2.0
         id: PR
       - id: prNumber
-        with:
-          node-version: '18'
         run: |
           echo "${{ github.event.number }} --> github.event.number"
           echo "${{ secrets.GITHUB_REF }} --> secrets.GITHUB_REF"
