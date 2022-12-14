@@ -13,7 +13,7 @@ jobs:
       - id: generatePrNumber
         run: |
           prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-      - if: steps.generatePrNumber.outputs.prNumber != ""
+      - if: steps.generatePrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
@@ -21,7 +21,7 @@ jobs:
           vars: |
             prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
             prNoomber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-      - if: steps.generatePrNumber.outputs.prNumber != ""
+      - if: steps.generatePrNumber.outputs.prNumber != ''
         id: pullRequest
         uses: tzkhan/pr-update-action@v2
         with:
