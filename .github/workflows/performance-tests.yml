@@ -40,6 +40,6 @@ jobs:
       - id: prNumber
         run: |
           echo "${{ github.event.number }} --> github.event.number"
-          && echo "${{ secrets.GITHUB_REF }} --> secrets.GITHUB_REF"
-          && echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
-          && echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
+          echo "${{ secrets.GITHUB_REF }} --> secrets.GITHUB_REF"
+          echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
+          echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
