@@ -1,32 +1,32 @@
 name: pr-tests
-run-name: Triggered by ${{ github.actor }} on PR
+run-name: Triggered by ${{ github.actor }} on PR and Push
 on:
   pull_request:
+  push:
 
 jobs:
   createPullRequest:
+    runs-on: ubuntu-latest
     steps:
-      - id: generatePrNumber
-        runs-on: macos-12
+      - uses: actions/checkout@v3
+      - id: getPrNumber
         run: |
-          node ci-cd/lighthouse/write-pr-number.js && prNumber=$(cat pr-number.txt)
-      - id: renderTemplate
-        runs-on: self-hosted
+          echo "prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)" >> $GITHUB_OUTPUT
+      - if: steps.getPrNumber.outputs.prNumber != ''
+        id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
           vars: |
-            prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
-      - id: pullRequest
-        uses: peter-evans/create-pull-request@v4
+            prNumber: ${{ steps.getPrNumber.outputs.prNumber }}
+            prNoomber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+      - if: steps.getPrNumber.outputs.prNumber != ''
+        id: updatePullRequest
+        uses: tzkhan/pr-update-action@v2
         with:
-          body: ${{ steps.renderTemplate.outputs.result }}
-
-  run-lighthouse-tests:
-    runs-on: macos-12
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-      - run: echo "I am the second job"
+          repo-token: "${{ secrets.GITHUB_TOKEN }}"
+          base-branch-regex: '(\w|\W)+'
+          head-branch-regex: '(\w|\W)+'
+          body-template: ${{ steps.renderTemplate.outputs.result }}
+          body-update-action: 'suffix'
+          body-uppercase-base-match: false
