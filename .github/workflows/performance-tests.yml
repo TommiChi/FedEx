@@ -12,10 +12,12 @@ jobs:
       - uses: actions/setup-node@v3
       - id: generatePrNumber
         run: |
-          prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-          echo "prNumber=$prNumber" >> $GITHUB_OUTPUT
+          pullRequestId=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+          echo "prNumber=$pullRequestId" >> $GITHUB_OUTPUT
         env:
           prNumber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+        outputs:
+          prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
       - id: batman
         run: |
           echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
