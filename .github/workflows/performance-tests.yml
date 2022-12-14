@@ -13,14 +13,16 @@ jobs:
       - id: generatePrNumber
         run: |
           prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-      - id: renderTemplate
+      - if: steps.generatePrNumber.outputs.prNumber != ""
+        id: renderTemplate
         uses: chuhlomin/render-template@v1.4
         with:
           template: .github/PULL_REQUEST_TEMPLATE/pull_request_template.md
           vars: |
             prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
             prNoomber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-      - id: pullRequest
+      - if: steps.generatePrNumber.outputs.prNumber != ""
+        id: pullRequest
         uses: tzkhan/pr-update-action@v2
         with:
           repo-token: "${{ secrets.GITHUB_TOKEN }}"

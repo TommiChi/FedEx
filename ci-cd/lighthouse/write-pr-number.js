@@ -6,8 +6,11 @@ const { PR_NUMBER, REF } = process.env;
 
 const isCreatedPR = REF.indexOf('/pull/') > -1;
 
-if (!isCreatedPR) return '';
+if (!isCreatedPR) {
+  console.log('');
+  return '';
+}
 
 console.log(PR_NUMBER);
-fs.writeFileSync(path.join(__dirname, '..', '..', 'pr-number.txt'), PR_NUMBER, { encoding: 'utf8' });
+// fs.writeFileSync(path.join(__dirname, '..', '..', 'pr-number.txt'), PR_NUMBER, { encoding: 'utf8' });
 return PR_NUMBER;
