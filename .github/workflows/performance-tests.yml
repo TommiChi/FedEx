@@ -13,7 +13,7 @@ jobs:
       - id: generatePrNumber
         run: |
           prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-          echo "prNumber=$prNumber"
+          echo "prNumber=$prNumber" >> $GITHUB_OUTPUT
         env:
           prNumber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
       - id: batman
