@@ -13,6 +13,10 @@ jobs:
       - id: generatePrNumber
         run: |
           prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+      - id: batman
+        run: |
+          echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
+          echo "outputs --> ${{ steps.generatePrNumber.outputs }}"
       - if: steps.generatePrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
@@ -31,9 +35,6 @@ jobs:
           body-template: ${{ steps.renderTemplate.outputs.result }}
           body-update-action: 'suffix'
           body-uppercase-base-match: false
-      - id: batman
-        run: |
-          echo "${{ github.actor }}"
 
   displayPr:
     runs-on: macos-12
