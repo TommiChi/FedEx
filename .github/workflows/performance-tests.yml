@@ -13,10 +13,11 @@ jobs:
       - id: generatePrNumber
         run: |
           prNumber=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
+          echo "$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)"
       - id: batman
         run: |
           echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
-          echo "outputs --> ${{ steps.generatePrNumber.outputs }}"
+          echo "outputs --> ${{ steps.generatePrNumber.outputs.result }}"
       - if: steps.generatePrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
