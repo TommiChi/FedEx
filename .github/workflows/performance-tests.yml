@@ -38,7 +38,6 @@ jobs:
       - id: prNumber
         run: |
           echo "${{ github.event.number }} --> github.event.number"
-          echo "${{ GITHUB_REF }} --> GITHUB_REF"
           echo "$GITHUB_REF --> dollar GITHUB_REF"
           echo "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
           echo "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
