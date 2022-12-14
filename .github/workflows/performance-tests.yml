@@ -7,6 +7,8 @@ on:
 jobs:
   createPullRequest:
     runs-on: ubuntu-latest
+    outputs:
+      prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
@@ -15,10 +17,7 @@ jobs:
           pullRequestId=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
           echo "prNumber=$pullRequestId" >> $GITHUB_OUTPUT
         env:
-          prNumber: $(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
-        outputs:
           prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
-      - id: batman
         run: |
           echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
           echo "outputs --> ${{ env.prNumber }}"
