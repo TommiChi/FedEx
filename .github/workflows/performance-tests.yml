@@ -30,11 +30,19 @@ jobs:
           echo "${{ github.actor }}"
 
 
-  run-lighthouse-tests:
+  displayPr:
     runs-on: macos-12
     steps:
+      - uses: jwalton/gh-find-current-pr@v1
+        id: findPr
+      - uses: 8BitJonny/gh-get-current-pr@2.2.0
+        id: PR
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
           node-version: '18'
-      - run: echo "I am the second job"
+      - run: |
+        echo ${{ github.event.number }} "${{ github.event.number }} --> github.event.number"
+        echo ${{ secrets.GITHUB_REF }} "${{ secrets.GITHUB_REF }} --> secrets.GITHUB_REF"
+        echo ${{ steps.PR.outputs.number }} "${{ steps.PR.outputs.number }} --> steps.PR.outputs.number"
+        echo ${{ steps.findPr.outputs.number }} "${{ steps.findPr.outputs.number }} --> steps.findPr.outputs.number"
