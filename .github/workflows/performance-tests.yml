@@ -16,11 +16,10 @@ jobs:
         run: |
           pullRequestId=$(REF=${{ github.ref }} PR_NUMBER=${{ github.event.pull_request.number }} node ci-cd/lighthouse/write-pr-number.js)
           echo "prNumber=$pullRequestId" >> $GITHUB_OUTPUT
-        env:
-          prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
-        run: |
           echo "prNumber --> ${{ steps.generatePrNumber.outputs.prNumber }}"
           echo "outputs --> ${{ env.prNumber }}"
+        env:
+          prNumber: ${{ steps.generatePrNumber.outputs.prNumber }}
       - if: steps.generatePrNumber.outputs.prNumber != ''
         id: renderTemplate
         uses: chuhlomin/render-template@v1.4
